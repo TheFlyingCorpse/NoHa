@@ -25,10 +25,10 @@ class ruleeval:
 	Optional: instance, input_delimiter, input_separator
 	"""
 	if ((application == "icinga") or (application == "nagios") or (application == "centreon") or (application == "shinken"))
-            if not input_delimiter:
-	        input_delimiter=";"
+		if not input_delimiter:
+			input_delimiter=";"
 	    if not separator:
-	        input_separator=","
+			input_separator=","
 	else:
 	    print("Unknown application")
 	    sys.exit(1)

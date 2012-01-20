@@ -25,13 +25,13 @@ def usage():
 	print("  -h, --help            Prints this message")
 #	print("                        Optional arguments: nagios ")
 	print("")
-	print("  -a, --application     Application name, ex: icinga")
-        print("  -I, --instance        Instance of application (optional)")
-        print("  -i, --input           Input to parse on to NoHa for filtering")
+	print("  -a, --application     Application name, ex: icinga, nagios, centreon or shinken")
+	print("  -I, --instance        Instance of application (optional)")
+	print("  -i, --input           Input to parse on to NoHa for filtering")
 	print("  -d, --delimiter       Delimiter between name=value and name=value")
 	print("  -S, --separator       Separator between name=value and value")
-        print("  -p, --pipe            Full path to pipe (not implemented)")
-        print("  -s, --socket          Adress to socket (not implemented)")
+	print("  -p, --pipe            Full path to pipe (not implemented)")
+	print("  -s, --socket          Adress to socket (not implemented)")
 
 def usage_nagios():
 	print("  ")
@@ -68,10 +68,10 @@ def main():
 			sys.exit()
 		elif o in ("-a", "--application"):
 			application = a
-                elif o in ("-I", "--instance"):
-                        instance = a
-                elif o in ("-i", "--input"):
-                        input = a
+		elif o in ("-I", "--instance"):
+			instance = a
+		elif o in ("-i", "--input"):
+			input = a
 		else:
 			assert False, "unhandled option"
 

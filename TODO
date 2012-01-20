@@ -4,9 +4,11 @@ ToDo for NoHa
 ToDo
 ----
 * Consider daemonizing it so it can handle escalations over time
-* Create a simple script to allow inputs
+* Create a simple script to allow inputs from external applications
 * Complete the modularization so any program can utilize the filters offered by NoHa for notifications
 * Add functionality so it will actually call notify functions
+* Figure out what backend AND frontend to use, for configuration
+
 * Time functions
 ** From and To within a day
 ** Xth day of month

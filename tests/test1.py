@@ -10,7 +10,11 @@
 # Licence:     GPL 2
 #-------------------------------------------------------------------------------
 
-# Import classes
+# Import sys class
+import sys
+
+# Import classes from the lib folder
+sys.path.append('../lib/')
 from ruleeval import ruleeval
 
 # make it easier to read

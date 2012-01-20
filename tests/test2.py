@@ -24,15 +24,13 @@ r = ruleeval()
 
 
 
-input = "HOSTGROUPS=linuxsrv,linux-mysql,linux-postfix;SERVICEGROUPS=mysql-svc,mysql;_AGENT_NRPE=YES;HOST=mailsrv03;SERVICE=MySQL"
+input = "HOSTGROUPS=windows-servers,mssql-srv,exchange-srv;SERVICEGROUPS=mssqlsvc,exchange-svc;_AGENT_NSCP=YES;HOST=exchange22;SERVICE=Memory"
 
 condition_list = [
-    'HOST;&;mailsrv*',
-    'HOST;!;windows',
-    'HOSTGROUPS;!;edir,oes2',
-    'HOSTGROUPS;&;linux-*,linux-postfix',
-    'SERVICEGROUPS;&;mysql-svc,ssh-srv',
-    '_AGENT_NRPE;&;YES',
+    'HOSTGROUPS;!;lab*,dev*',
+    'HOSTGROUPS;&;windows-servers,exchange-srv',
+    'SERVICEGROUPS;&;exchange-svc',
+    '_AGENT_NSCP;&;YES',
     ]
 
 

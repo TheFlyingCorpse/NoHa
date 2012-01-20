@@ -24,20 +24,19 @@ r = ruleeval()
 
 
 
-input = "HOSTGROUPS=linuxsrv,linux-mysql,linux-postfix;SERVICEGROUPS=mysql-svc,mysql;_AGENT_NRPE=YES;HOST=mailsrv03;SERVICE=MySQL"
+input = "HOSTGROUPS=linuxsrv,linux-apache;SERVICEGROUPS=apache-svc,tomcat-svc,mysql;_AGENT_NRPE=YES;HOST=websrv32;SERVICE=Apache;_CRITICALITY=PRODUCTION"
 
 condition_list = [
-    'HOST;&;mailsrv*',
-    'HOST;!;windows',
-    'HOSTGROUPS;!;edir,oes2',
-    'HOSTGROUPS;&;linux-*,linux-postfix',
-    'SERVICEGROUPS;&;mysql-svc,ssh-srv',
-    '_AGENT_NRPE;&;YES',
+    'HOSTGROUPS;&;linux-mysql',
+    'HOSTGROUPS;!;linux-apache',
+    'SERVICEGROUPS;&;apache-svc',
+    '_CRITICALITY;&;PRODUCTION',
+    '_AGENT_NSCP;!;NO',
     ]
 
 
 result = r.evaluate_input_vs_conditions(input,";",condition_list,";")
 if result:
-    print("OK, RULES MATCH")
+    print("FALSE, RULES MATCH")
 else:
-    print("FALSE, CONDITIONS DOES NOT MATCH")
+    print("OK, CONDITIONS DOES NOT MATCH")

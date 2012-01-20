@@ -8,7 +8,7 @@ NoHa is an alternative way to handle notifications sent from your nagios based m
 
 Features
 --------
-* None at the moment
+* None at the moment, see the TODO file for more information
 
 Support
 -------

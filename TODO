@@ -1,0 +1,17 @@
+ToDo for NoHa
+=============
+
+ToDo
+----
+* Consider daemonizing it so it can handle escalations over time
+* Create a simple script to allow inputs
+* Complete the modularization so any program can utilize the filters offered by NoHa for notifications
+* Add functionality so it will actually call notify functions
+* Time functions
+** From and To within a day
+** Xth day of month
+** Start and End of validity
+** On-Call functions
+** Shift functions
+* Better documentation
+

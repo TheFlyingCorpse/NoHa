@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-------------------------------------------------------------------------------
-# Name:        interface.py
+# Name:        messages.py
 # Purpose:     Contain the rules class and function definitions for the class.
 #
 # Author:      Rune "TheFlyingCorpse" Darrud
@@ -12,8 +12,9 @@
 
 # import Regular Expressions
 import re
+import interface
 
-class interface:
+class messages:
 
 #######################################################################
 def main():

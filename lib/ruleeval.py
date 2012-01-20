@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-------------------------------------------------------------------------------
-# Name:        ruleeval.pyw
+# Name:        ruleeval.py
 # Purpose:     Contain the rules class and function definitions for the class.
 #
 # Author:      Rune "TheFlyingCorpse" Darrud
@@ -24,10 +24,10 @@ class ruleeval:
 	Required: application, input
 	Optional: instance, input_delimiter, input_separator
 	"""
-	if ((application == "icinga") or (application == "nagios") or (application == "centreon") or (application == "shinken"))
+	if ((application == "icinga") or (application == "nagios") or (application == "centreon") or (application == "shinken")):
 		if not input_delimiter:
 			input_delimiter=";"
-	    if not separator:
+		if not input_separator:
 			input_separator=","
 	else:
 	    print("Unknown application")
@@ -43,6 +43,7 @@ class ruleeval:
 			# Determine if contact on holiday
 			# Determine if contact on-call
 			# More messy code!
+	return True
 	
 
     def evaluate_input_vs_conditions(self, input, input_separator, rules, rules_separator):

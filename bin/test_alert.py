@@ -13,7 +13,7 @@
 import sys, getopt
 sys.path.append('../lib/')
 sys.path.append('lib/')
-import ruleeval
+from ruleeval import ruleeval
 
 # Make it shorter
 r = ruleeval()
@@ -28,25 +28,37 @@ def usage():
 	print("  -a, --application     Application name, ex: icinga, nagios, centreon or shinken")
 	print("  -I, --instance        Instance of application (optional)")
 	print("  -i, --input           Input to parse on to NoHa for filtering")
-	print("  -d, --delimiter       Delimiter between name=value and name=value")
-	print("  -S, --separator       Separator between name=value and value")
+	print("  -d, --delimiter       Delimiter between name=value and name=value, ex ; (optional)")
+	print("  -s, --separator       Separator between name=value and value, ex , (optional)")
 	print("  -p, --pipe            Full path to pipe (not implemented)")
-	print("  -s, --socket          Adress to socket (not implemented)")
+	print("  -S, --socket          Adress to socket (not implemented)")
 
 def usage_nagios():
 	print("  ")
 
-def alert(application,instance, input, verbose):
+def alert(application,instance, input, input_delimiter, input_separator, verbose):
 	if verbose:
-		print("Application: " + application)
-		print("Instance:    " + instance)
-		print("Input:       " + input)
-	r.eval_input_of_application(application,instance,input,delimiter,separator)
+		print("Passing the following arguments on:")
+		print("Application:       " + application)
+		print("Instance:          " + instance)
+		print("Input:             " + input)
+		print("Input delimiter:   " + input_delimiter)
+		print("Input separator:   " + input_separator)
+		print("")
 
+	alert_result = r.eval_input_of_application(application,instance,input,input_delimiter,input_separator)
+	if verbose:
+		print("Result:")
+		if alert_result:
+			print("Alert OK, matching rule")
+		elif not alert_result:
+			print("Alert OK, no matching rule")
+		else:
+			print("Alert result unknown")
 
 def main():
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "ha:Ii:v", ["help", "application=", "instance=", "input="])
+		opts, args = getopt.getopt(sys.argv[1:], "ha:Ii:vd:s:", ["help", "application=", "instance=", "input=", "delimiter=", "separator="])
 	except getopt.GetoptError, err:
 		#print help information and exit:
 		print(str(err))
@@ -57,6 +69,8 @@ def main():
 	application = None
 	instance = None
 	input = None
+	delimiter = None
+	separator = None
 	verbose = False
 
 	# Loop through all arguments
@@ -72,11 +86,15 @@ def main():
 			instance = a
 		elif o in ("-i", "--input"):
 			input = a
+		elif o in ("-d", "--delimiter"):
+			delimiter = a
+		elif o in ("-s", "--separator"):
+			separator = a
 		else:
 			assert False, "unhandled option"
 
 	# Call alert function to pass on the information
-	alert(str(application), str(instance), str(input), verbose)
+	alert(str(application), str(instance), str(input), str(delimiter), str(separator), verbose)
 
 if __name__ == "__main__":
 	main()

@@ -1,10 +1,23 @@
-ToDo for NoHa
-=============
+ToDo and Roadmap for NoHa
+=========================
 
-ToDo
-----
-* Consider daemonizing it so it can handle escalations over time
-* Create a simple script to allow inputs from external applications
+ToDo and Roadmap
+----------------
+
+Version 0.01 (Finished)
+* Make a agile set of functions to handle dynamic input and filters
+
+Version 0.02 (W.I.P.)
+* Create a simple script to allow inputs from external applications to be parsed
+
+Version 0.03
+* Notifications from external 
+
+Future -- (not yet decided)
+---------------------------
+* Consider daemonizing it so it can handle escalations / keep rules in memory for faster processing
+** Socket / Pipe ?
+
 * Complete the modularization so any program can utilize the filters offered by NoHa for notifications
 * Add functionality so it will actually call notify functions
 * Figure out what backend AND frontend to use, for configuration
@@ -15,5 +28,9 @@ ToDo
 ** Start and End of validity
 ** On-Call functions
 ** Shift functions
+
 * Better documentation
 
+Far future
+----------
+* Encryption via socket

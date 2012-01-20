@@ -7,11 +7,21 @@ ToDo and Roadmap
 Version 0.01 (Finished)
 * Make a agile set of functions to handle dynamic input and filters
 
-Version 0.02 (W.I.P.)
-* Create a simple script to allow inputs from external applications to be parsed
+Version 0.02 (Current - W.I.P.)
+* Create a simple script to allow inputs from external applications to be parsed (80%)
+* Configuration from file
 
 Version 0.03
-* Notifications from external 
+* Code cleanup
+
+Version 0.04
+* Determine contacts to rules
+
+Version 0.05
+* Determine contactgroups (and in turn, contacts)
+
+Version 0.06
+* Concept shifts / on-call?
 
 Future -- (not yet decided)
 ---------------------------

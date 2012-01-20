@@ -15,22 +15,33 @@ sys.path.append('../lib/')
 sys.path.append('lib/')
 import ruleeval
 
+# Make it shorter
+r = ruleeval()
+
 def usage():
 	print(sys.argv[0] + " - Forward notifcations to NoHa")
 	print("")
 	print("Valid options are:")
 	print("  -h, --help            Prints this message")
+#	print("                        Optional arguments: nagios ")
+	print("")
 	print("  -a, --application     Application name, ex: icinga")
         print("  -I, --instance        Instance of application (optional)")
         print("  -i, --input           Input to parse on to NoHa for filtering")
+	print("  -d, --delimiter       Delimiter between name=value and name=value")
+	print("  -S, --separator       Separator between name=value and value")
         print("  -p, --pipe            Full path to pipe (not implemented)")
         print("  -s, --socket          Adress to socket (not implemented)")
+
+def usage_nagios():
+	print("  ")
 
 def alert(application,instance, input, verbose):
 	if verbose:
 		print("Application: " + application)
 		print("Instance:    " + instance)
 		print("Input:       " + input)
+	r.eval_input_of_application(application,instance,input,delimiter,separator)
 
 
 def main():

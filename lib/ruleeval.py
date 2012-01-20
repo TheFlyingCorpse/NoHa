@@ -15,6 +15,36 @@ import re
 
 class ruleeval:
 
+    def eval_input_of_application(self, application, instance, input, input_delimiter, input_separator):
+	"""
+	UNSAFE!
+	Evaluate input of applications
+	If no input_delimiter and/ input_separator given, default for application is used.
+
+	Required: application, input
+	Optional: instance, input_delimiter, input_separator
+	"""
+	if ((application == "icinga") or (application == "nagios") or (application == "centreon") or (application == "shinken"))
+            if not input_delimiter:
+	        input_delimiter=";"
+	    if not separator:
+	        input_separator=","
+	else:
+	    print("Unknown application")
+	    sys.exit(1)
+
+	# Fetch rules for application + instance and process the conditions to determine valid ones
+	# Loop
+#		valid_conditions =  self.evaluate_input_vs_conditions(input,input_delimiter,input_separator,condition_list,condition_delimiter,condition_separator)
+#		is valid_conditions:
+			# Determine if any contacts are set as on-call or shift users.
+		
+			#contacts_with_methods = self.get_contacts_with_methods_from_rules(valid_condtitions)
+			# Determine if contact on holiday
+			# Determine if contact on-call
+			# More messy code!
+	
+
     def evaluate_input_vs_conditions(self, input, input_separator, rules, rules_separator):
         """
         Evaluate input vs conditions

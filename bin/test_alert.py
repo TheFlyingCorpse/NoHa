@@ -23,7 +23,8 @@ def usage():
 	print("")
 	print("Valid options are:")
 	print("  -h, --help            Prints this message")
-#	print("                        Optional arguments: nagios ")
+    print("  -v                    Verbose output")
+    print("  -D                    Debug output")
 	print("")
 	print("  -a, --application     Application name, ex: icinga, nagios, centreon or shinken")
 	print("  -I, --instance        Instance of application (optional)")
@@ -33,32 +34,32 @@ def usage():
 	print("  -p, --pipe            Full path to pipe (not implemented)")
 	print("  -S, --socket          Adress to socket (not implemented)")
 
-def usage_nagios():
-	print("  ")
-
-def alert(application,instance, input, input_delimiter, input_separator, verbose):
+def alert(debug, verbose, application,instance, input, input_delimiter, input_separator):
 	if verbose:
 		print("Passing the following arguments on:")
-		print("Application:       " + application)
-		print("Instance:          " + instance)
-		print("Input:             " + input)
-		print("Input delimiter:   " + input_delimiter)
-		print("Input separator:   " + input_separator)
+		if application:			print("Application:       " + application)
+		if instance:			print("Instance:          " + instance)
+		if input:				print("Input:             " + input)
+		if input_delimiter:		print("Input delimiter:   " + input_delimiter)
+		if input_separator: 	print("Input separator:   " + input_separator)
+		if verbose:             print("Verbose:           " + str(verbose))
+		if debug:				print("Debug:             " + str(debug))
 		print("")
 
-	alert_result = r.eval_input_of_application(application,instance,input,input_delimiter,input_separator)
+	test_result = r.eval_input_of_application(debug,verbose,application,instance,input,input_delimiter,input_separator)
 	if verbose:
-		print("Result:")
-		if alert_result:
+		print("")
+		print("Test Result:")
+		if test_result:
 			print("Alert OK, matching rule")
-		elif not alert_result:
+		elif not test_result:
 			print("Alert OK, no matching rule")
 		else:
 			print("Alert result unknown")
 
 def main():
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "ha:Ii:vd:s:", ["help", "application=", "instance=", "input=", "delimiter=", "separator="])
+		opts, args = getopt.getopt(sys.argv[1:], "Dvha:Ii:d:s:", ["help", "application=", "instance=", "input=", "delimiter=", "separator="])
 	except getopt.GetoptError, err:
 		#print help information and exit:
 		print(str(err))
@@ -72,11 +73,14 @@ def main():
 	delimiter = None
 	separator = None
 	verbose = False
+	debug = False
 
 	# Loop through all arguments
 	for o, a in opts:
 		if o == "-v":
 			verbose = True
+		elif o == "-D":
+			debug = True
 		elif o in ("-h", "--help"):
 			usage()
 			sys.exit()
@@ -94,7 +98,7 @@ def main():
 			assert False, "unhandled option"
 
 	# Call alert function to pass on the information
-	alert(str(application), str(instance), str(input), str(delimiter), str(separator), verbose)
+	alert(debug, verbose, str(application), instance, str(input), delimiter, separator)
 
 if __name__ == "__main__":
 	main()

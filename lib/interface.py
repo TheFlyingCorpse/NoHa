@@ -21,32 +21,64 @@ import yaml
 
 class interface:
 
-	def load_app_config(self, config_file):
+	def load_app_config(self, debug, verbose, config, application):
+		"""
+		Return with application specific configuration settings
+		"""
+		# If config file is unspecified, try to get the default one.
+		if not config:
+			if debug: print("No config specified, calling for the default one")
+			config_result, config = self.load_yaml_config(debug, verbose, None)
+
+		# If application is not set, abort.
+		if not application:
+			if debug: print("No application specified")
+			return False, "No application set, cant return with any properties"
+
+		# Iterate through all known applications
+		for item in config['applications']:
+			if debug: print("Application read from file: " + str(item))
+			# If match
+			if item['name'] == application:
+				if debug or verbose: print("Got a match for application: " + str(application))
+				return True, item
+			else:
+				if debug or verbose: print("Unknown application specified: " + application)
+				return False, "Unknown application specified: " + str(application)
+
+	def load_yaml_config(self, debug, verbose, config_file):
 		"""
 		Load the application config and return it as (type) dictionary
 		"""
+		if debug: print("Going to load config data via YaML from: " + str(config_file))
 		# Load from default if otherwise specified
 		if not config_file:
-			config_file = "../etc/noha.yml"
+			if verbose or debug: print("config_file parameter not set, setting it to default path")
+			config_file = "etc/noha.yml"
 
 		# Check that it exists before continuing.
-		if not self.file_exists(config_file):
-			return False, "Config file could not be located: " + config_file
+		if not self.file_exists(debug, verbose, config_file):
+			if verbose or debug: print("Config file could not be located: " + config_file)
+			return False, False
 
 		# Open as stream, read-only	
 		stream = open(config_file, 'r')
 
-		appConfig = yaml.load(stream)
+		YamlConfig = yaml.load(stream)
 		# Return the data as dictionary type.
-		return True, appConfig
+		if verbose or debug: print("Config file parsed, returning True, YamlConfig to the calling function with the config structure")
+		return True, YamlConfig
 
-	def file_exists(self, file_path):
+	def file_exists(self, debug, verbose, file_path):
 		"""
 		Check if the file exists.
 		"""
+		if debug: print("Going to check if file exists: " + file_path)
 		if not os.path.isfile(file_path):
+			if verbose: print("File not found: " + file_path)
 			return False
 		
+		if verbose: print("File found: " + file_path)
 		return True
 
 #######################################################################

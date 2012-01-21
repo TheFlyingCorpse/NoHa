@@ -7,11 +7,11 @@ ToDo and Roadmap
 Version 0.01 (Finished)
 * Make a agile set of functions to handle dynamic input and filters
 
-Version 0.02 (Current - W.I.P.)
-* Create a simple script to allow inputs from external applications to be parsed (80%)
-* Configuration from file
+Version 0.02 (Finished)
+* Create a simple script to allow inputs from external applications to be parsed
+* Configuration from file 
 
-Version 0.03
+Version 0.03 (Current - W.I.P)
 * Code cleanup
 
 Version 0.04

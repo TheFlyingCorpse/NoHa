@@ -13,9 +13,17 @@
 # import Regular Expressions
 import re
 
+import yaml
+
+# Import interface
+from interface import interface
+
+# make it shorter
+i = interface()
+
 class ruleeval:
 
-    def eval_input_of_application(self, application, instance, input, input_delimiter, input_separator):
+    def eval_input_of_application(self, debug, verbose, application, instance, input, input_delimiter, input_separator):
 	"""
 	UNSAFE!
 	Evaluate input of applications
@@ -24,15 +32,29 @@ class ruleeval:
 	Required: application, input
 	Optional: instance, input_delimiter, input_separator
 	"""
-	if ((application == "icinga") or (application == "nagios") or (application == "centreon") or (application == "shinken")):
-		if not input_delimiter:
-			input_delimiter=";"
-		if not input_separator:
-			input_separator=","
+
+	if debug or verbose: print("Calling for YamlConfig")
+	(temp_result, YamlConfig) = i.load_yaml_config(debug, verbose, None)
+
+	# Application config (for application in argument)
+	if temp_result:
+		if debug or verbose: print("Calling for AppConfig")
+		(temp_result, AppConfig) = i.load_app_config(debug, verbose, YamlConfig, application)
+
+		if (not temp_result) or (repr(AppConfig) is str):
+			if debug or verbose: print("Invalid AppConfig data, returning...")
+			return False
 	else:
-		print("Unknown application")
+		if debug or verbose: print("result of YamlConfig was False, not parsing AppConfig, returning early")
 		return False
-	    #sys.exit(1)
+
+	if not input_delimiter:
+		if debug or verbose: print("Setting to default delimiter for application because none are set for input: " + str(AppConfig['delimiter']))
+		input_delimiter = AppConfig['delimiter']
+
+	if not input_separator:
+		if debug or verbose: print("Setting to default separator for application because none are set for input: " + str(AppConfig['separator']))
+		input_separator = AppConfig['separator']
 
 	# Fetch rules for application + instance and process the conditions to determine valid ones
 	# Loop

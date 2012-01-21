@@ -1,0 +1,16 @@
+application: NoHa
+version: 0.02
+rulesdir: /home/tfc/git/NoHa/etc/rules/
+handlers:
+- name: nagios
+  delimiter: ";"
+  separator: ","
+applications:
+- name: icinga
+  handler: nagios
+- name: nagios
+  handler: nagios
+- name: centreon
+  handler: nagios
+- name: shinken
+  handler: nagios

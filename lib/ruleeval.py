@@ -30,8 +30,9 @@ class ruleeval:
 		if not input_separator:
 			input_separator=","
 	else:
-	    print("Unknown application")
-	    sys.exit(1)
+		print("Unknown application")
+		return False
+	    #sys.exit(1)
 
 	# Fetch rules for application + instance and process the conditions to determine valid ones
 	# Loop

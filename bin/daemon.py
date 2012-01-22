@@ -10,10 +10,13 @@
 # Licence:     GPL 2
 #-------------------------------------------------------------------------------
 
+from twisted.protocols import amp
 import sys, getopt
 sys.path.append('../lib/')
 sys.path.append('lib/')
-from ruleeval import ruleeval
+#from ruleeval import ruleeval
+
+from interface import SendData, SendAlert
 
 # Make it shorter
 r = ruleeval()
@@ -25,7 +28,17 @@ def usage():
     print("  -h, --help            Prints this message")
     print("  -v                    Verbose output")
     print("  -D                    Debug output")
+    print("  -d, --daemonize       Daemonize")
     print("")
+
+def daemon():
+    from twisted.internet import reactor
+    from twisted.internet.protocol import Factory
+    pf = Factory()
+    pf.protocol = SendData
+    reactor.listenTCP(1234, pf)
+    print 'started'
+    reactor.run()
 
 def main():
     try:
@@ -53,7 +66,7 @@ def main():
             assert False, "unhandled option"
 
     # Call SOME function to pass on the information
-    FUNCTION(debug, verbose, args*)
+    daemon()
 
 if __name__ == "__main__":
     main()

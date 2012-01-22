@@ -6,6 +6,12 @@ What is NoHa
 
 NoHa is an alternative way to handle notifications sent from your nagios based monitoring system. The goal of the project is to make it easy to filter notifications to contacts based on rules with conditions that must be met for the rule to be valid.
 
+Requirements
+------------
+Python requirements:
+* pyYAML (OpenSuSE: python-yaml)
+* Twisted (OpenSuSE: python-twisted)
+
 Features
 --------
 * None at the moment, see the TODO file for more information

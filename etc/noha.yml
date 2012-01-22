@@ -1,6 +1,17 @@
 application: NoHa
 version: 0.03
-rulesdir: /home/tfc/git/NoHa/etc/rules/
+properties:
+  listen_on: socket
+  daemonize: 0
+  socket_properties:
+    address: 0.0.0.0
+    port: 6031
+  pipe_properties:
+    path: /home/tfc/git/NoHa/var/noha.pipe
+  logging_properties:
+    logfile: /home/tfc/git/NoHa/var/noha.log
+    debugfile: /home/tfc/git/NoHa/var/noha.debug
+  rulesdir: /home/tfc/git/NoHa/etc/rules/
 applications:
 - name: icinga
   delimiter: ";"

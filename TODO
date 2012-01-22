@@ -12,7 +12,8 @@ Version 0.02 (Finished)
 * Configuration from file 
 
 Version 0.03 (Current - W.I.P)
-* Code cleanup
+* Code cleanup (0%)
+* Finish daemonizing with twistd, both client and server (10%)
 
 Version 0.04
 * Determine contacts to rules
@@ -25,7 +26,7 @@ Version 0.06
 
 Future -- (not yet decided)
 ---------------------------
-* Consider daemonizing it so it can handle escalations / keep rules in memory for faster processing
+* Should daemon handle escalations?
 ** Socket / Pipe ?
 
 * Complete the modularization so any program can utilize the filters offered by NoHa for notifications

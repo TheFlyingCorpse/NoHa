@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-------------------------------------------------------------------------------
-# Name:        alert_noha.py
-# Purpose:     Simple script that connects to NoHa and sends the alert
+# Name:        noha-alert.py
+# Purpose:     Simple script that connects to NoHa and alerts via XML-RPC
 #
 # Author:      Rune "TheFlyingCorpse" Darrud
 #
@@ -11,12 +11,6 @@
 #-------------------------------------------------------------------------------
 
 import sys, getopt, xmlrpclib
-sys.path.append('../lib/')
-sys.path.append('lib/')
-#from ruleeval import ruleeval
-
-# Make it shorter
-#r = ruleeval()
 
 def usage():
 	print(sys.argv[0] + " - Forward notifcations to NoHa")

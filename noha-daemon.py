@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-------------------------------------------------------------------------------
-# Name:        daemon.py
+# Name:        noha-daemon.py
 # Purpose:     Daemon to handle external calls via pipe and/ socket.
 #
 # Author:      Rune "TheFlyingCorpse" Darrud
@@ -14,13 +14,11 @@ import sys, getopt, xmlrpclib, daemon, time
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 import threading
 from threading import Thread
+from ruleeval import ruleeval
 
-sys.path.append('../lib/')
-sys.path.append('lib/')
-#from ruleeval import ruleeval
+# Make it shorter:
+r = ruleeval()
 
-# Make it shorter
-#r = ruleeval()
 
 def usage():
     print(sys.argv[0] + " - Forward notifcations to NoHa")
@@ -33,22 +31,28 @@ def usage():
     print("")
 
 def doAlert(debug, verbose, encryption, application, instance, input, delimiter, separator):
-	if verbose or debug:
+	if verbose and debug:
 		print("Thread testing, will print one line every second")
 		print("threading info: " + threading.current_thread().name)
 		print("DEBUG:       " + str(debug))
-		time.sleep(1)
+		#time.sleep(1)
 		print("VERBOSE:     " + str(verbose))
-		time.sleep(1)
+		#time.sleep(1)
 		print("INPUT:       " + str(input))
-		time.sleep(1)
+		#time.sleep(1)
 		print("APPLICATION: " + str(application))
-		time.sleep(1)
+		#time.sleep(1)
 		print("INSTANCE:    " + str(instance))
-		time.sleep(1)
+		#time.sleep(1)
 		print("DELIMITER:   " + str(delimiter))
-		time.sleep(1)
+		#time.sleep(1)
 		print("SEPARATOR:   " + str(separator))
+
+	# This is the function we call for now, to be rewritten.
+	result = r.eval_input_of_application(debug, verbose, application, instance, input, delimiter, separator)
+
+	# Output might be handy
+	if verbose or debug: print("Result of eval: " + str(result))
 	return 0
 
 def main_program():
@@ -89,6 +93,9 @@ def main():
             sys.exit()
         else:
             assert False, "unhandled option"
+
+    # Read the config, so it doesnt have to be loaded for every call (downside of reading and parsing for every notifiction)
+    # IMPLEMENT
 
     # Call SOME function to pass on the information
     if daemonize:

@@ -35,17 +35,13 @@ def usage():
 	print("  -S, --socket          Adress to socket (not implemented)")
 
 def doAlert(debug, verbose, encryption, application, instance, input, delimiter, separator):
-    proxy = xmlrpclib.ServerProxy("http://localhost:8000/", allow_none=True)
-#    application='icinga'
-#    instance='fak'
-#    debug=False
- ##   verbose=False
- #   encryption=None
- #   input="FEU FEI"
- #   delimiter=";"
- #   separator=","
+	# Define proxy object
+	proxy = xmlrpclib.ServerProxy("http://localhost:8000/", allow_none=True)
+	# Call threadedAlert with the following arguments from the defined proxy object.
+	result = proxy.threadedAlert(debug, verbose, encryption, application, instance, input, delimiter, separator)
 
-    print "Result: %s" % str(proxy.threadedAlert(debug, verbose, encryption, application, instance, input, delimiter, separator))
+	if verbose:
+		print("Result: " + str(result))
 
 def main():
 	try:
@@ -60,11 +56,11 @@ def main():
 	application = None
 	instance = False
 	input = None
-	delimiter = None
-	separator = None
+	delimiter = False
+	separator = False
 	verbose = False
 	debug = False
-	encryption = False # not implemented
+	encryption = False # not implemented(yet?)
 
 	# Loop through all arguments
 	for o, a in opts:

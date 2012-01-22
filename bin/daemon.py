@@ -10,8 +10,9 @@
 # Licence:     GPL 2
 #-------------------------------------------------------------------------------
 
-import sys, getopt, xmlrpclib, daemon
+import sys, getopt, xmlrpclib, daemon, time
 from SimpleXMLRPCServer import SimpleXMLRPCServer
+import threading
 from threading import Thread
 
 sys.path.append('../lib/')
@@ -33,13 +34,21 @@ def usage():
 
 def doAlert(debug, verbose, encryption, application, instance, input, delimiter, separator):
 	if verbose or debug:
-		print "DEBUG:       " + str(debug)
-		print "VERBOSE:     " + str(verbose)
-		print "INPUT:       " + str(input)
-		print "APPLICATION: " + str(application)
-		print "INSTANCE:    " + str(instance)
-		print "DELIMITER:   " + str(delimiter)
-		print "SEPARATOR:   " + str(separator)
+		print("Thread testing, will print one line every second")
+		print("threading info: " + threading.current_thread().name)
+		print("DEBUG:       " + str(debug))
+		time.sleep(1)
+		print("VERBOSE:     " + str(verbose))
+		time.sleep(1)
+		print("INPUT:       " + str(input))
+		time.sleep(1)
+		print("APPLICATION: " + str(application))
+		time.sleep(1)
+		print("INSTANCE:    " + str(instance))
+		time.sleep(1)
+		print("DELIMITER:   " + str(delimiter))
+		time.sleep(1)
+		print("SEPARATOR:   " + str(separator))
 	return 0
 
 def main_program():

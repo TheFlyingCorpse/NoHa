@@ -12,16 +12,20 @@ Version 0.02 (Finished)
 * Configuration from file 
 
 Version 0.03 (Current - W.I.P)
-* Code cleanup (5%)
-* Daemonize, with server and client made from XML-RPC. (0%)
+* Code cleanup (30%)
+* Daemonize, with server and client made from XML-RPC. (60%)
 
 Version 0.04
-* Determine contacts to rules
+* Move files about for a logical Python structure.
+* Timeframes: Valid From, Valid To, Xth day of Month, "time1-time2,time3-time4"... (You'll understand later ;-) )
 
 Version 0.05
-* Determine contactgroups (and in turn, contacts)
+* Determine contacts to rules
 
 Version 0.06
+* Determine contactgroups (and in turn, contacts)
+
+Version 0.07
 * Concept shifts / on-call?
 
 Future -- (not yet decided)

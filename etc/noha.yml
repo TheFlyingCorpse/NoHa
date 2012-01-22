@@ -1,6 +1,5 @@
 application: NoHa
-version: 0.03
-properties:
+app_properties:
   listen_on: socket
   daemonize: 0
   socket_properties:
@@ -12,6 +11,7 @@ properties:
     logfile: /home/tfc/git/NoHa/var/noha.log
     debugfile: /home/tfc/git/NoHa/var/noha.debug
   rulesdir: /home/tfc/git/NoHa/etc/rules/
+version: 0.03b
 applications:
 - name: icinga
   delimiter: ";"
@@ -25,3 +25,12 @@ applications:
 - name: shinken
   delimiter: ";"
   separator: ","
+methods:
+- name: sms
+  type: external
+  path: /bin/echo -e "SMS"
+  ackable: True
+- name: email
+  type: internal
+- name: growl
+  type: internal

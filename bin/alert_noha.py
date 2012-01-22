@@ -39,12 +39,6 @@ def usage():
 	print("  -p, --pipe            Full path to pipe (not implemented)")
 	print("  -S, --socket          Adress to socket (not implemented)")
 
-def doAlert(debug, verbose, encryption, application, instance, input, delimiter, separator):
-
-    ClientCreator(reactor, amp.AMP).connectTCP('127.0.0.1', 1234).addCallback(
-       lambda p: p.callRemote(SendAlert, debug=debug, verbose=verbose, encryption=encryption, application=application, instance=instance, input=input, delimiter=delimiter, separator=separator)).addCallback(
-           lambda result: result['result'])
-
 def main():
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], "Dvha:Ii:d:s:", ["help", "application=", "instance=", "input=", "delimiter=", "separator="])
@@ -88,10 +82,8 @@ def main():
 
 	# Call alert function to pass on the information
 	#alert(debug, verbose, str(application), instance, str(input), delimiter, separator)
-	result = doAlert(debug, verbose, int(encryption), application, str(instance), input, delimiter, separator)
+	#result = doAlert(debug, verbose, int(encryption), application, str(instance), input, delimiter, separator)
+	print("NOT IMPLEMENTED YET")
 
 if __name__ == "__main__":
-	#main()
-	doAlert(False, False, False, 'icinga', 'None', "HOSTGROUPS=blA,blaaa;SERVICEGROUPS=hehehe", ";", ",")
-	reactor.run()
-	reactor.stop()
+	main()

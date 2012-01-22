@@ -16,8 +16,6 @@ sys.path.append('../lib/')
 sys.path.append('lib/')
 #from ruleeval import ruleeval
 
-from interface import SendData, SendAlert
-
 # Make it shorter
 r = ruleeval()
 
@@ -32,13 +30,7 @@ def usage():
     print("")
 
 def daemon():
-    from twisted.internet import reactor
-    from twisted.internet.protocol import Factory
-    pf = Factory()
-    pf.protocol = SendData
-    reactor.listenTCP(1234, pf)
-    print 'started'
-    reactor.run()
+	print(" NOT IMPLEMENTED  YET")
 
 def main():
     try:

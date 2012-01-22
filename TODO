@@ -12,8 +12,8 @@ Version 0.02 (Finished)
 * Configuration from file 
 
 Version 0.03 (Current - W.I.P)
-* Code cleanup (0%)
-* Finish daemonizing with twistd, both client and server (10%)
+* Code cleanup (5%)
+* Daemonize, with server and client made from XML-RPC. (0%)
 
 Version 0.04
 * Determine contacts to rules

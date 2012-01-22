@@ -10,10 +10,10 @@ Requirements
 ------------
 Python requirements:
 * pyYAML (OpenSuSE: python-yaml)
-* Twisted (OpenSuSE: python-twisted)
 
 Features
 --------
+* Can sort based on input on-demand with hardcoded conditions in the ruleeval.py file.
 * None at the moment, see the TODO file for more information
 
 Support

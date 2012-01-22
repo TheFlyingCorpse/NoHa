@@ -1,0 +1,20 @@
+# APP CONFIGURATION - YAML FORMAT
+## Contain config for server and client
+## Point to a directory with the rule definitions
+## Point to a directory with the timeframe definitions
+## Point to a directory with the contacts ? 
+## Point to a directory with the contactgroups ?
+
+# SERVER - DAEMON
+## import classes (heavy ones)
+## Read config
+## Start listener
+### On recieve:
+### Store data in a temp variable
+### Return 0
+### Fork / Thread on each packet recieved, no callbacks neccesary
+
+# CLIENT - SCRIPT
+## import classes (lightweight ones!)
+## Validate input
+## Send to XMLRPC Server

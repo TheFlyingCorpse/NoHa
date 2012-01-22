@@ -15,10 +15,15 @@ from SimpleXMLRPCServer import SimpleXMLRPCServer
 import threading
 from threading import Thread
 from ruleeval import ruleeval
+from interface import interface
 
 # Make it shorter:
 r = ruleeval()
+i = interface()
 
+# Puproses which need no explainin
+debug = False
+verbose = False
 
 def usage():
     print(sys.argv[0] + " - Forward notifcations to NoHa")
@@ -55,13 +60,31 @@ def doAlert(debug, verbose, encryption, application, instance, input, delimiter,
 	if verbose or debug: print("Result of eval: " + str(result))
 	return 0
 
-def main_program():
+def main_program(YamlConfig):
     def threadedAlert(debug, verbose, encryption, application, instance, input, delimiter, separator):
         t = Thread(target=doAlert, args=(debug, verbose, encryption, application, instance, input, delimiter, separator))
         t.start()
         return 0
 
-    server = SimpleXMLRPCServer(("localhost", 8000), allow_none=True)
+    listen_on = YamlConfig['app_properties']['listen_on']
+    if debug or verbose: print("Listen on: " + str(listen_on))
+
+    # Determine what we are to bind to
+    if listen_on == "socket":
+        socket_addr = YamlConfig['app_properties']['socket_properties']['address']
+        socket_port = YamlConfig['app_properties']['socket_properties']['port']
+    elif listen_on == "pipe":
+        pipe_path = YamlConfig['app_properties']['pipe_path']
+    else:
+        print("Unknown type to listen on: " + str(listen_on))
+        return False
+
+    if listen_on == "socket":
+        server = SimpleXMLRPCServer((socket_addr, socket_port))
+    else:
+        print("Listen on (" + listen_on + ") not implemented yet")
+        return False
+
     print "Listening on port 8000..."
     server.register_function(threadedAlert,"threadedAlert")
     server.serve_forever()
@@ -95,14 +118,20 @@ def main():
             assert False, "unhandled option"
 
     # Read the config, so it doesnt have to be loaded for every call (downside of reading and parsing for every notifiction)
-    # IMPLEMENT
+    if debug or verbose: print("Calling for YamlConfig")
+    (temp_result, YamlConfig) = i.load_yaml_config(debug, verbose, None)
+    if temp_result:
+        if verbose or debug: print(" Configuration data read ")
+    else:
+        print(" Unable to read the configuration file! ")
+        return False
 
     # Call SOME function to pass on the information
     if daemonize:
         with daemon.DaemonContext():
-            main_program()
+            main_program(YamlConfig)
     else:
-        main_program()
+        main_program(YamlConfig)
 
 if __name__ == "__main__":
     main()

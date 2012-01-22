@@ -10,7 +10,11 @@
 # Licence:     GPL 2
 #-------------------------------------------------------------------------------
 
-import sys, getopt, xmlrpclib
+import sys, getopt, xmlrpclib, yaml
+from interface import interface
+
+# Make it shorter
+i = interface()
 
 def usage():
 	print(sys.argv[0] + " - Forward notifcations to NoHa")
@@ -28,9 +32,27 @@ def usage():
 	print("  -p, --pipe            Full path to pipe (not implemented)")
 	print("  -S, --socket          Adress to socket (not implemented)")
 
-def doAlert(debug, verbose, encryption, application, instance, input, delimiter, separator):
+def doAlert(YamlConfig, debug, verbose, encryption, application, instance, input, delimiter, separator):
+
+	# Determine what the properties are, from the configuration.
+	listen_on = YamlConfig['app_properties']['listen_on']
+	if debug or verbose: print("Listen on: " + str(listen_on))
+
+	# Determine what we are to bind to
+	if listen_on == "socket":
+		socket_addr = YamlConfig['app_properties']['socket_properties']['address']
+		socket_port = YamlConfig['app_properties']['socket_properties']['port']
+	elif listen_on == "pipe":
+		pipe_path = YamlConfig['app_properties']['pipe_path']
+	else:
+		print("Unknown type to listen on: " + str(listen_on))
+		return False
+
+	if listen_on == "socket":
+		address = "http://" + socket_addr + ":" + str(socket_port) + "/"
+
 	# Define proxy object
-	proxy = xmlrpclib.ServerProxy("http://localhost:8000/", allow_none=True)
+	proxy = xmlrpclib.ServerProxy(address)
 	# Call threadedAlert with the following arguments from the defined proxy object.
 	result = proxy.threadedAlert(debug, verbose, encryption, application, instance, input, delimiter, separator)
 
@@ -83,9 +105,18 @@ def main():
 	if not application: print "Missing application name"; error = 1
 	if not input: print "Missing input"; error = 1
 	if error == 1: sys.exit()
+
+	# Read the config, so it doesnt have to be loaded for every call (downside of reading and parsing for every notifiction)
+	if debug or verbose: print("Calling for YamlConfig")
+	(temp_result, YamlConfig) = i.load_yaml_config(debug, verbose, None)
+	if temp_result:
+		if verbose or debug: print(" Configuration data read ")
+	else:
+		print(" Unable to read the configuration file! ")
+		return False
+
 	# Call alert function to pass on the information
-	#alert(debug, verbose, str(application), instance, str(input), delimiter, separator)
-	result = doAlert(debug, verbose, encryption, application, instance, input, delimiter, separator)
+	result = doAlert(YamlConfig, debug, verbose, encryption, application, instance, input, delimiter, separator)
 	if verbose: 
 		if result == 0: 
 			print "Result OK: " + str(result)

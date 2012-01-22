@@ -10,7 +10,6 @@
 # Licence:     GPL 2
 #-------------------------------------------------------------------------------
 
-from twisted.protocols import amp
 import sys, getopt
 sys.path.append('../lib/')
 sys.path.append('lib/')

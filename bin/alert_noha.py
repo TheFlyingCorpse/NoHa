@@ -15,11 +15,6 @@ sys.path.append('../lib/')
 sys.path.append('lib/')
 #from ruleeval import ruleeval
 
-from twisted.internet import reactor, defer
-from twisted.internet.protocol import ClientCreator
-from twisted.protocols import amp
-from interface import SendAlert, SendData
-
 # Make it shorter
 #r = ruleeval()
 

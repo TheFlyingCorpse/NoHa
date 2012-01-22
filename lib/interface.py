@@ -19,9 +19,6 @@ import re
 # import pyYAML
 import yaml
 
-# import AMP from twisted
-from twisted.protocols import amp
-
 class interface:
 
 	def load_app_config(self, debug, verbose, config, application):

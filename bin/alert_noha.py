@@ -10,7 +10,7 @@
 # Licence:     GPL 2
 #-------------------------------------------------------------------------------
 
-import sys, getopt
+import sys, getopt, xmlrpclib
 sys.path.append('../lib/')
 sys.path.append('lib/')
 #from ruleeval import ruleeval
@@ -34,6 +34,19 @@ def usage():
 	print("  -p, --pipe            Full path to pipe (not implemented)")
 	print("  -S, --socket          Adress to socket (not implemented)")
 
+def doAlert(debug, verbose, encryption, application, instance, input, delimiter, separator):
+    proxy = xmlrpclib.ServerProxy("http://localhost:8000/", allow_none=True)
+#    application='icinga'
+#    instance='fak'
+#    debug=False
+ ##   verbose=False
+ #   encryption=None
+ #   input="FEU FEI"
+ #   delimiter=";"
+ #   separator=","
+
+    print "Result: %s" % str(proxy.threadedAlert(debug, verbose, encryption, application, instance, input, delimiter, separator))
+
 def main():
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], "Dvha:Ii:d:s:", ["help", "application=", "instance=", "input=", "delimiter=", "separator="])
@@ -45,7 +58,7 @@ def main():
 
 	# Set defaults
 	application = None
-	instance = None
+	instance = False
 	input = None
 	delimiter = None
 	separator = None
@@ -75,10 +88,19 @@ def main():
 		else:
 			assert False, "unhandled option"
 
+	# Check if we got the least amount of input
+	error = 0
+	if not application: print "Missing application name"; error = 1
+	if not input: print "Missing input"; error = 1
+	if error == 1: sys.exit()
 	# Call alert function to pass on the information
 	#alert(debug, verbose, str(application), instance, str(input), delimiter, separator)
-	#result = doAlert(debug, verbose, int(encryption), application, str(instance), input, delimiter, separator)
-	print("NOT IMPLEMENTED YET")
+	result = doAlert(debug, verbose, encryption, application, instance, input, delimiter, separator)
+	if verbose: 
+		if result == 0: 
+			print "Result OK: " + str(result)
+		else:
+			print "Result unknown: " + str(result)
 
 if __name__ == "__main__":
 	main()

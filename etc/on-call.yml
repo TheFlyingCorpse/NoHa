@@ -1,0 +1,5 @@
+on_call_schedule:
+- name: test_schedule
+  timeframe: 24x7
+  contacts:
+  - username: foo

@@ -12,8 +12,8 @@
 
 # import Regular Expressions
 import re
-
 import yaml
+import logging
 
 # Import interface
 from interface import interface
@@ -21,7 +21,12 @@ from interface import interface
 # make it shorter
 i = interface()
 
+ruleeval_logger = logging.getLogger('main_app.ruleeval')
+
 class ruleeval:
+    def __init__(self):
+		logging.basicConfig(filename='/dev/null', level=logging.INFO, format='%(name)s')
+		self.logger = logging.getLogger('main_app')
 
     def eval_input_of_application(self, debug, verbose, application, instance, input, input_delimiter, input_separator):
 	"""
@@ -33,27 +38,27 @@ class ruleeval:
 	Optional: instance, input_delimiter, input_separator
 	"""
 
-	if debug or verbose: print("Calling for YamlConfig")
+	self.logger.error("Calling for YamlConfig")
 	(temp_result, YamlConfig) = i.load_yaml_config(debug, verbose, None)
 
 	# Application config (for application in argument)
 	if temp_result:
-		if debug or verbose: print("Calling for AppConfig")
+		self.logger.error("Calling for AppConfig")
 		(temp_result, AppConfig) = i.load_app_config(debug, verbose, YamlConfig, application)
 
 		if (not temp_result) or (repr(AppConfig) is str):
-			if debug or verbose: print("Invalid AppConfig data, returning...")
+			self.logger.info("Invalid AppConfig data, returning...")
 			return False
 	else:
-		if debug or verbose: print("result of YamlConfig was False, not parsing AppConfig, returning early")
+		self.logger.info("result of YamlConfig was False(not loaded), not parsing AppConfig, returning early")
 		return False
 
 	if not input_delimiter:
-		if debug or verbose: print("Setting to default delimiter for application because none are set for input: " + str(AppConfig['delimiter']))
+		self.logger.warn("Setting to default delimiter for application because none are set for input: " + str(AppConfig['delimiter']))
 		input_delimiter = AppConfig['delimiter']
 
 	if not input_separator:
-		if debug or verbose: print("Setting to default separator for application because none are set for input: " + str(AppConfig['separator']))
+		self.logger.warn("Setting to default separator for application because none are set for input: " + str(AppConfig['separator']))
 		input_separator = AppConfig['separator']
 
 	# Fetch rules for application + instance and process the conditions to determine valid ones
@@ -175,7 +180,7 @@ class ruleeval:
         elif (operator == "!" and not match_found):
             return True
         else:
-            print("Unknown combination, operator: " + str(operator) + " match_found: " + str(match_found))
+            self.logger.info("Unknown combination, operator: " + str(operator) + " match_found: " + str(match_found))
             return False
 
     def split_by_separator(self, string, separator):

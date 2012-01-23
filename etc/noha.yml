@@ -1,16 +1,21 @@
 application: NoHa
 app_properties:
-  listen_on: socket
+  connection_type: socket
   daemonize: 0
   socket_properties:
     address: 0.0.0.0
     port: 6031
   pipe_path: /home/tfc/git/NoHa/var/noha.pipe
-  logging_properties:
+  daemon_logging_properties:
     logging_enabled: true
-    log_format: '%(asctime)-6s: [%(process)d]-[%(thread)s] - %(levelname)s - %(message)s' # See: http://docs.python.org/library/logging.html#logrecord-attributes
+    log_format: '%(asctime)-6s: [%(process)d]-[%(thread)s] - %(levelname)s - Daemon - %(funcName)s - %(message)s' # See: http://docs.python.org/library/logging.html#logrecord-attributes
     loglevel: debug # One of: debug, info, warn, error, critical
-    logfile: /home/tfc/git/NoHa/var/noha.log
+    logfile: /home/tfc/git/NoHa/var/noha-daemon.log
+  alert_logging_properties:
+    logging_enabled: true
+    log_format: '%(asctime)-6s: [%(process)d]-[%(thread)s] - %(levelname)s - Alerter - %(funcName)s - %(message)s' # See: http://docs.python.org/library/logging.html#logrecord-attributes
+    loglevel: debug # One of: debug, info, warn, error, critical
+    logfile: /home/tfc/git/NoHa/var/noha-alert.log
   rulesdir: /home/tfc/git/NoHa/etc/rules/
 version: 0.03b
 applications:

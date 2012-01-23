@@ -12,12 +12,10 @@
 
 import sys, getopt, xmlrpclib, daemon, time
 from SimpleXMLRPCServer import SimpleXMLRPCServer
-from logging import Logger
 import threading, logging
 from threading import Thread
 from ruleeval import ruleeval
 from interface import interface
-import messages
 
 # Make it shorter:
 r = ruleeval()
@@ -31,21 +29,30 @@ verbose = False
 (temp_result, YamlConfig) = i.load_yaml_config(debug, verbose, None)
 if temp_result:
 	# Set up logging before anything else! (Ugly?)
-	LoggingEnabled = YamlConfig['app_properties']['logging_properties']['logging_enabled']
+	LoggingEnabled = YamlConfig['app_properties']['daemon_logging_properties']['logging_enabled']
 
 	# Use the config (if found) to be the guiding star.
 	if LoggingEnabled:
-		LogFile = YamlConfig['app_properties']['logging_properties']['logfile']
-		LogLevel = YamlConfig['app_properties']['logging_properties']['loglevel']
+		LogFile = YamlConfig['app_properties']['daemon_logging_properties']['logfile']
+		LogLevel = YamlConfig['app_properties']['daemon_logging_properties']['loglevel']
 	else:
 		LogFile = '/dev/null'
 		LogLevel = 'info'
 
-	LogFormat = YamlConfig['app_properties']['logging_properties']['log_format']
+	LogFormat = YamlConfig['app_properties']['daemon_logging_properties']['log_format']
 	d={'debug': logging.DEBUG, 'info': logging.INFO, 'warn': logging.WARN, 'error': logging.ERROR, 'critical': logging.CRITICAL}
-	logging.basicConfig(filename=LogFile, level=d[LogLevel],format=LogFormat)
 
-	logging.info('Initializing daemon...')
+    # Load the basic config for the logging module.
+	logging.basicConfig(filename='/dev/null', level=d[LogLevel], format=LogFormat)
+	daemon_logger = logging.getLogger('main_app')
+	daemon_logger.setLevel(d[LogLevel])
+	fh = logging.FileHandler(LogFile)
+	fh.setLevel(d[LogLevel])
+	formatter = logging.Formatter(LogFormat)
+	fh.setFormatter(formatter)
+	daemon_logger.addHandler(fh)
+
+	daemon_logger.info('Initializing daemon...')
 	# Logging done, lets get on to business...
 else:
 	print("Could not read the configuration, unable to proceed")
@@ -60,54 +67,54 @@ def usage():
     print("  -D                    Debug output")
     print("  -d, --daemonize       Daemonize")
     print("")
-    logging.error(' Usage() called on ' + str(sys.argv[0]))
+    daemon_logger.error(' Usage() called on ' + str(sys.argv[0]))
 
-def doAlert(debug, verbose, encryption, application, instance, input, delimiter, separator):
-	logging.warn('Input to doAlert: ')
-	logging.warn('  Debug      : ' + str(debug))
-	logging.warn('  Verbose    : ' + str(verbose))
-	logging.warn('  Application: ' + str(application))
-	logging.warn('  Instance   : ' + str(instance))
-	logging.warn('  Delimiter  : ' + str(delimiter))
-	logging.warn('  Separator  : ' + str(separator))
-	logging.warn('  Input: ' + str(input))
+def doAlert(debug, verbose, application, instance, input, delimiter, separator):
+	daemon_logger.warn('Input to doAlert: ')
+	daemon_logger.warn('  Debug      : ' + str(debug))
+	daemon_logger.warn('  Verbose    : ' + str(verbose))
+	daemon_logger.warn('  Application: ' + str(application))
+	daemon_logger.warn('  Instance   : ' + str(instance))
+	daemon_logger.warn('  Delimiter  : ' + str(delimiter))
+	daemon_logger.warn('  Separator  : ' + str(separator))
+	daemon_logger.warn('  Input: ' + str(input))
 
 	# This is the function we call for now, to be rewritten.
 	result = r.eval_input_of_application(debug, verbose, application, instance, input, delimiter, separator)
 
 	# Logging might be handy
-	logging.error('Result from server ' + str(result))
+	daemon_logger.error('Result from server ' + str(result))
 	return 0
 
 def main_program(YamlConfig):
-    def threadedAlert(debug, verbose, encryption, application, instance, input, delimiter, separator):
-        t = Thread(target=doAlert, args=(debug, verbose, encryption, application, instance, input, delimiter, separator))
+    def threadedAlert(debug, verbose, application, instance, input, delimiter, separator):
+        t = Thread(target=doAlert, args=(debug, verbose, application, instance, input, delimiter, separator))
         t.start()
         return 0
 
-    listen_on = YamlConfig['app_properties']['listen_on']
-    if debug or verbose: print("Listen on: " + str(listen_on))
-    logging.info('Listen on: ' + str(listen_on))
+    connection_type = YamlConfig['app_properties']['connection_type']
+    if debug or verbose: print("Listen on: " + str(connection_type))
+    daemon_logger.info('Listen on: ' + str(connection_type))
 
     # Determine what we are to bind to
-    if listen_on == "socket":
+    if connection_type == "socket":
         socket_addr = YamlConfig['app_properties']['socket_properties']['address']
         socket_port = YamlConfig['app_properties']['socket_properties']['port']
-    elif listen_on == "pipe":
+    elif connection_type == "pipe":
         pipe_path = YamlConfig['app_properties']['pipe_path']
     else:
-        logging.info("Unknown type to listen on: " + str(listen_on))
-        print("Unknown type to listen on: " + str(listen_on))
+        daemon_logger.info("Unknown connection type to listen on: " + str(connection_type))
+        print("Unknown connection type to listen on: " + str(connection_type))
         return False
 
-    if listen_on == "socket":
+    if connection_type == "socket":
         server = SimpleXMLRPCServer((socket_addr, socket_port))
     else:
-        logging.info("Listen on (" + str(listen_on) + ") not implemented yet")
-        print("Listen on (" + listen_on + ") not implemented yet")
+        daemon_logger.info("Connection type " + str(connection_type) + " not implemented yet")
+        print("Connection type " + connection_type + " not implemented yet")
         return False
 
-    logging.info('Listening on ' + str(socket_addr) + ':' + str(socket_port))
+    daemon_logger.info('Listening on ' + str(socket_addr) + ':' + str(socket_port))
     server.register_function(threadedAlert,"threadedAlert")
     server.serve_forever()
 
@@ -116,7 +123,7 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:], "Dhvd", ["help", "daemonize"])
     except getopt.GetoptError, err:
         #print help information and exit:
-        logging.info('Invalid arguments: ' + str(err))
+        daemon_logger.info('Invalid arguments: ' + str(err))
         print(str(err))
         usage()
         sys.exit(2)
@@ -142,11 +149,11 @@ def main():
 
     # Call SOME function to pass on the information
     if daemonize:
-        logging.info('Daemonizing...')
+        daemon_logger.info('Daemonizing...')
         with daemon.DaemonContext():
             main_program(YamlConfig)
     else:
-        logging.info('Running as a console script...')
+        daemon_logger.info('Running as a console script...')
         main_program(YamlConfig)
 
 if __name__ == "__main__":

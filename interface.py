@@ -19,7 +19,14 @@ import re
 # import pyYAML
 import yaml
 
+import logging
+
+interface_logger = logging.getLogger('main_app.interface')
+
 class interface:
+	def __init__(self):
+		logging.basicConfig(filename='/dev/null', level=logging.INFO, format='%(name)s')
+		self.logger = logging.getLogger('main_app')
 
 	def load_app_config(self, debug, verbose, config, application):
 		"""
@@ -27,38 +34,39 @@ class interface:
 		"""
 		# If config file is unspecified, try to get the default one.
 		if not config:
-			if debug: print("No config specified, calling for the default one")
+			self.logger.warn(" No config specified, calling for the default one")
+			#if debug: print("No config specified, calling for the default one")
 			config_result, config = self.load_yaml_config(debug, verbose, None)
 
 		# If application is not set, abort.
 		if not application:
-			if debug: print("No application specified")
+			self.logger.warn(" No application specified")
 			return False, "No application set, cant return with any properties"
 
 		# Iterate through all known applications
 		for item in config['applications']:
-			if debug: print("Application read from file: " + str(item))
+			self.logger.error("Application read from file: " + str(item))
 			# If match
 			if item['name'] == application:
-				if debug or verbose: print("Got a match for application: " + str(application))
+				self.logger.error("Got a match for application: " + str(application))
 				return True, item
 			else:
-				if debug or verbose: print("Unknown application specified: " + application)
+				self.logger.info("Unknown application specified: " + str(application))
 				return False, "Unknown application specified: " + str(application)
 
 	def load_yaml_config(self, debug, verbose, config_file):
 		"""
 		Load the application config and return it as (type) dictionary
 		"""
-		if debug: print("Going to load config data via YaML from: " + str(config_file))
+		self.logger.warn("Going to load config data via YaML from: " + str(config_file))
 		# Load from default if otherwise specified
 		if not config_file:
-			if verbose or debug: print("config_file parameter not set, setting it to default path")
+			self.logger.warn("config_file parameter not set, setting it to default path")
 			config_file = "etc/noha.yml"
 
 		# Check that it exists before continuing.
 		if not self.file_exists(debug, verbose, config_file):
-			if verbose or debug: print("Config file could not be located: " + config_file)
+			self.logger.infp("Config file could not be located: " + str(config_file))
 			return False, False
 
 		# Open as stream, read-only	
@@ -66,19 +74,19 @@ class interface:
 
 		YamlConfig = yaml.load(stream)
 		# Return the data as dictionary type.
-		if verbose or debug: print("Config file parsed, returning True, YamlConfig to the calling function with the config structure")
+		self.logger.warn("Config file parsed, returning True, YamlConfig to the calling function with the config structure")
 		return True, YamlConfig
 
 	def file_exists(self, debug, verbose, file_path):
 		"""
 		Check if the file exists.
 		"""
-		if debug: print("Going to check if file exists: " + file_path)
+		self.logger.error("Going to check if file exists: " + str(file_path))
 		if not os.path.isfile(file_path):
-			if verbose: print("File not found: " + file_path)
+			if verbose: self.logger.warn("File not found: " + str(file_path))
 			return False
 		
-		if verbose: print("File found: " + file_path)
+		if verbose: self.logger.error("File found: " + str(file_path))
 		return True
 
 #######################################################################

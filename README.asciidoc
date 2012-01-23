@@ -14,8 +14,10 @@ Python requirements:
 Features
 --------
 * Can sort based on input on-demand with hardcoded conditions in the ruleeval.py file.
-* None at the moment, see the TODO file for more information
+* Client and Server, where client sends the messages over XML-RPC to the Server for processing.
 
 Support
 -------
-* None, beacuse there is nothing to support
+Logging:
+* in etc/noha.yml by default, uses LogRecord attributes which can be looked up here: http://docs.python.org/library/logging.html#logrecord-attributes
+

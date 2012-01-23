@@ -10,11 +10,13 @@
 # Licence:     GPL 2
 #-------------------------------------------------------------------------------
 
-# import Regular Expressions
 import re
-import interface
+import yaml
+from interface import interface
+debug = False
+verbose = False
 
-class messages:
+#class messages:
 
 #######################################################################
 def main():

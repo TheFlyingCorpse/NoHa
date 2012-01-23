@@ -7,8 +7,10 @@ app_properties:
     port: 6031
   pipe_path: /home/tfc/git/NoHa/var/noha.pipe
   logging_properties:
+    logging_enabled: true
+    log_format: '%(asctime)-6s: [%(process)d]-[%(thread)s] - %(levelname)s - %(message)s' # See: http://docs.python.org/library/logging.html#logrecord-attributes
+    loglevel: debug # One of: debug, info, warn, error, critical
     logfile: /home/tfc/git/NoHa/var/noha.log
-    debugfile: /home/tfc/git/NoHa/var/noha.debug
   rulesdir: /home/tfc/git/NoHa/etc/rules/
 version: 0.03b
 applications:

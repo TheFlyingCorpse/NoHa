@@ -11,21 +11,28 @@ Version 0.02 (Finished)
 * Create a simple script to allow inputs from external applications to be parsed
 * Configuration from file 
 
-Version 0.03 (Current - W.I.P)
-* Code cleanup (30%)
-* Daemonize, with server and client made from XML-RPC. (60%)
+Version 0.03 (Finished)
+* Code cleanup
+* Move files about for a logical Python structure.
+* Make a server(listener) and client(alerter) with XML-RPC. 
 
 Version 0.04
-* Move files about for a logical Python structure.
-* Timeframes: Valid From, Valid To, Xth day of Month, "time1-time2,time3-time4"... (You'll understand later ;-) )
+* Logging structure, with cleanup related to STDOUT, STDERR and where to push the output.
+* Daemonize the server script.
 
 Version 0.05
+* Timeframes: Valid From, Valid To, Xth day of Month, "time1-time2,time3-time4"... (You'll understand later ;-) )
+
+Version 0.06 + 0.07
+* To be determined
+
+Version 0.08
 * Determine contacts to rules
 
-Version 0.06
+Version 0.09
 * Determine contactgroups (and in turn, contacts)
 
-Version 0.07
+Version 0.10
 * Concept shifts / on-call?
 
 Future -- (not yet decided)

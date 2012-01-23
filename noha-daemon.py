@@ -12,10 +12,12 @@
 
 import sys, getopt, xmlrpclib, daemon, time
 from SimpleXMLRPCServer import SimpleXMLRPCServer
-import threading
+from logging import Logger
+import threading, logging
 from threading import Thread
 from ruleeval import ruleeval
 from interface import interface
+import messages
 
 # Make it shorter:
 r = ruleeval()
@@ -24,6 +26,30 @@ i = interface()
 # Puproses which need no explainin
 debug = False
 verbose = False
+
+# Read the config, so it doesnt have to be loaded for every call (downside to reading and parsing for every notifiction)
+(temp_result, YamlConfig) = i.load_yaml_config(debug, verbose, None)
+if temp_result:
+	# Set up logging before anything else! (Ugly?)
+	LoggingEnabled = YamlConfig['app_properties']['logging_properties']['logging_enabled']
+
+	# Use the config (if found) to be the guiding star.
+	if LoggingEnabled:
+		LogFile = YamlConfig['app_properties']['logging_properties']['logfile']
+		LogLevel = YamlConfig['app_properties']['logging_properties']['loglevel']
+	else:
+		LogFile = '/dev/null'
+		LogLevel = 'info'
+
+	LogFormat = YamlConfig['app_properties']['logging_properties']['log_format']
+	d={'debug': logging.DEBUG, 'info': logging.INFO, 'warn': logging.WARN, 'error': logging.ERROR, 'critical': logging.CRITICAL}
+	logging.basicConfig(filename=LogFile, level=d[LogLevel],format=LogFormat)
+
+	logging.info('Initializing daemon...')
+	# Logging done, lets get on to business...
+else:
+	print("Could not read the configuration, unable to proceed")
+	sys.exit(2)
 
 def usage():
     print(sys.argv[0] + " - Forward notifcations to NoHa")
@@ -34,30 +60,23 @@ def usage():
     print("  -D                    Debug output")
     print("  -d, --daemonize       Daemonize")
     print("")
+    logging.error(' Usage() called on ' + str(sys.argv[0]))
 
 def doAlert(debug, verbose, encryption, application, instance, input, delimiter, separator):
-	if verbose and debug:
-		print("Thread testing, will print one line every second")
-		print("threading info: " + threading.current_thread().name)
-		print("DEBUG:       " + str(debug))
-		#time.sleep(1)
-		print("VERBOSE:     " + str(verbose))
-		#time.sleep(1)
-		print("INPUT:       " + str(input))
-		#time.sleep(1)
-		print("APPLICATION: " + str(application))
-		#time.sleep(1)
-		print("INSTANCE:    " + str(instance))
-		#time.sleep(1)
-		print("DELIMITER:   " + str(delimiter))
-		#time.sleep(1)
-		print("SEPARATOR:   " + str(separator))
+	logging.warn('Input to doAlert: ')
+	logging.warn('  Debug      : ' + str(debug))
+	logging.warn('  Verbose    : ' + str(verbose))
+	logging.warn('  Application: ' + str(application))
+	logging.warn('  Instance   : ' + str(instance))
+	logging.warn('  Delimiter  : ' + str(delimiter))
+	logging.warn('  Separator  : ' + str(separator))
+	logging.warn('  Input: ' + str(input))
 
 	# This is the function we call for now, to be rewritten.
 	result = r.eval_input_of_application(debug, verbose, application, instance, input, delimiter, separator)
 
-	# Output might be handy
-	if verbose or debug: print("Result of eval: " + str(result))
+	# Logging might be handy
+	logging.error('Result from server ' + str(result))
 	return 0
 
 def main_program(YamlConfig):
@@ -68,6 +87,7 @@ def main_program(YamlConfig):
 
     listen_on = YamlConfig['app_properties']['listen_on']
     if debug or verbose: print("Listen on: " + str(listen_on))
+    logging.info('Listen on: ' + str(listen_on))
 
     # Determine what we are to bind to
     if listen_on == "socket":
@@ -76,16 +96,18 @@ def main_program(YamlConfig):
     elif listen_on == "pipe":
         pipe_path = YamlConfig['app_properties']['pipe_path']
     else:
+        logging.info("Unknown type to listen on: " + str(listen_on))
         print("Unknown type to listen on: " + str(listen_on))
         return False
 
     if listen_on == "socket":
         server = SimpleXMLRPCServer((socket_addr, socket_port))
     else:
+        logging.info("Listen on (" + str(listen_on) + ") not implemented yet")
         print("Listen on (" + listen_on + ") not implemented yet")
         return False
 
-    print "Listening on port 8000..."
+    logging.info('Listening on ' + str(socket_addr) + ':' + str(socket_port))
     server.register_function(threadedAlert,"threadedAlert")
     server.serve_forever()
 
@@ -94,6 +116,7 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:], "Dhvd", ["help", "daemonize"])
     except getopt.GetoptError, err:
         #print help information and exit:
+        logging.info('Invalid arguments: ' + str(err))
         print(str(err))
         usage()
         sys.exit(2)
@@ -117,20 +140,13 @@ def main():
         else:
             assert False, "unhandled option"
 
-    # Read the config, so it doesnt have to be loaded for every call (downside of reading and parsing for every notifiction)
-    if debug or verbose: print("Calling for YamlConfig")
-    (temp_result, YamlConfig) = i.load_yaml_config(debug, verbose, None)
-    if temp_result:
-        if verbose or debug: print(" Configuration data read ")
-    else:
-        print(" Unable to read the configuration file! ")
-        return False
-
     # Call SOME function to pass on the information
     if daemonize:
+        logging.info('Daemonizing...')
         with daemon.DaemonContext():
             main_program(YamlConfig)
     else:
+        logging.info('Running as a console script...')
         main_program(YamlConfig)
 
 if __name__ == "__main__":

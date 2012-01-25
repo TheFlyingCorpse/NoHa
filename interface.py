@@ -28,15 +28,14 @@ class interface:
 		logging.basicConfig(filename='/dev/null', level=logging.INFO, format='%(name)s')
 		self.logger = logging.getLogger('main_app')
 
-	def load_app_config(self, debug, verbose, config, application):
+	def load_app_config(self, config, application):
 		"""
 		Return with application specific configuration settings
 		"""
 		# If config file is unspecified, try to get the default one.
 		if not config:
 			self.logger.warn(" No config specified, calling for the default one")
-			#if debug: print("No config specified, calling for the default one")
-			config_result, config = self.load_yaml_config(debug, verbose, None)
+			config_result, config = self.load_yaml_config(None)
 
 		# If application is not set, abort.
 		if not application:
@@ -54,7 +53,9 @@ class interface:
 				self.logger.info("Unknown application specified: " + str(application))
 				return False, "Unknown application specified: " + str(application)
 
-	def load_yaml_config(self, debug, verbose, config_file):
+	def load_rules_config(self, config_file):
+
+	def load_yaml_config(self, config_file):
 		"""
 		Load the application config and return it as (type) dictionary
 		"""
@@ -65,7 +66,7 @@ class interface:
 			config_file = "etc/noha.yml"
 
 		# Check that it exists before continuing.
-		if not self.file_exists(debug, verbose, config_file):
+		if not self.file_exists(config_file):
 			self.logger.infp("Config file could not be located: " + str(config_file))
 			return False, False
 
@@ -77,7 +78,7 @@ class interface:
 		self.logger.warn("Config file parsed, returning True, YamlConfig to the calling function with the config structure")
 		return True, YamlConfig
 
-	def file_exists(self, debug, verbose, file_path):
+	def file_exists(self, file_path):
 		"""
 		Check if the file exists.
 		"""

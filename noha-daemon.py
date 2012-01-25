@@ -69,7 +69,7 @@ def usage():
     print("")
     daemon_logger.error(' Usage() called on ' + str(sys.argv[0]))
 
-def doAlert(debug, verbose, application, instance, input, delimiter, separator):
+def doAlert(application, instance, input, delimiter, separator):
 	daemon_logger.warn('Input to doAlert: ')
 	daemon_logger.warn('  Debug      : ' + str(debug))
 	daemon_logger.warn('  Verbose    : ' + str(verbose))
@@ -87,8 +87,8 @@ def doAlert(debug, verbose, application, instance, input, delimiter, separator):
 	return 0
 
 def main_program(YamlConfig):
-    def threadedAlert(debug, verbose, application, instance, input, delimiter, separator):
-        t = Thread(target=doAlert, args=(debug, verbose, application, instance, input, delimiter, separator))
+    def threadedAlert(application, instance, input, delimiter, separator):
+        t = Thread(target=doAlert, args=(application, instance, input, delimiter, separator))
         t.start()
         return 0
 

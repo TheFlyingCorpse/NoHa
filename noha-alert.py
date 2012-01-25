@@ -97,7 +97,7 @@ def doAlert(debug, verbose, application, instance, input, delimiter, separator):
 	# Define proxy object
 	proxy = xmlrpclib.ServerProxy(address)
 	# Call threadedAlert with the following arguments from the defined proxy object.
-	result = proxy.threadedAlert(debug, verbose, application, instance, input, delimiter, separator)
+	result = proxy.threadedAlert(application, instance, input, delimiter, separator)
 
 	if verbose:
 		print("Result: " + str(result))

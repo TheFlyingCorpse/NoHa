@@ -28,7 +28,7 @@ class ruleeval:
 		logging.basicConfig(filename='/dev/null', level=logging.INFO, format='%(name)s')
 		self.logger = logging.getLogger('main_app')
 
-    def eval_input_of_application(self, debug, verbose, application, instance, input, input_delimiter, input_separator):
+    def eval_input_of_application(self, application, instance, input, input_delimiter, input_separator):
 	"""
 	UNSAFE!
 	Evaluate input of applications
@@ -39,12 +39,12 @@ class ruleeval:
 	"""
 
 	self.logger.error("Calling for YamlConfig")
-	(temp_result, YamlConfig) = i.load_yaml_config(debug, verbose, None)
+	(temp_result, YamlConfig) = i.load_yaml_config(None)
 
 	# Application config (for application in argument)
 	if temp_result:
 		self.logger.error("Calling for AppConfig")
-		(temp_result, AppConfig) = i.load_app_config(debug, verbose, YamlConfig, application)
+		(temp_result, AppConfig) = i.load_app_config(YamlConfig, application)
 
 		if (not temp_result) or (repr(AppConfig) is str):
 			self.logger.info("Invalid AppConfig data, returning...")

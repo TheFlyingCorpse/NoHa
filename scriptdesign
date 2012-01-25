@@ -1,9 +1,10 @@
 # APP CONFIGURATION - YAML FORMAT
 ## Contain config for server and client
-## Point to a directory with the rule definitions
-## Point to a directory with the timeframe definitions
+## Point to a file with the rule definitions
+## Point to a file with the timeframe definitions
 ## Point to a directory with the contacts ? 
 ## Point to a directory with the contactgroups ?
+## Point to a file with on-call / shift functionality?
 
 # SERVER - DAEMON
 ## import classes (heavy ones)
@@ -18,3 +19,23 @@
 ## import classes (lightweight ones!)
 ## Validate input
 ## Send to XMLRPC Server
+
+
+# CLASSFILE - INTERFACE
+## Load program configuration for NoHa with Yaml
+## Load application specific(icinga, nagios, shinken, centreon...) configuration from the already loaded Yaml configuration
+## Load rules from Yaml.
+
+# CLASSFILE - RULEEVAL
+## Evaluate the rules read in via the interface class.
+
+# CLASSFILE - TIMEHANDLING
+## Probable needed definitions
+### Within / outside datetime (same function, boolean decides if inside or outside)
+### Within / outside time (same function, boolean decides if inside or outside)
+### Load rule timeframe, decide if valid
+### Load contact time, decide if valid
+### Load contact time, decide if valid
+### Holiday function? (Or just usde the within / outside datetime, wrap as holiday for logging purposes)
+### Shift functionality?
+### On-call functionality?

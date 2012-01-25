@@ -28,7 +28,7 @@ class ruleeval:
 		logging.basicConfig(filename='/dev/null', level=logging.INFO, format='%(name)s')
 		self.logger = logging.getLogger('main_app')
 
-    def eval_input_of_application(self, application, instance, input, input_delimiter, input_separator):
+    def eval_input_of_application(self, config, application, instance, input, input_delimiter, input_separator):
 	"""
 	UNSAFE!
 	Evaluate input of applications

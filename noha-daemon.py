@@ -26,7 +26,7 @@ debug = False
 verbose = False
 
 # Read the config, so it doesnt have to be loaded for every call (downside to reading and parsing for every notifiction)
-(temp_result, YamlConfig) = i.load_yaml_config(debug, verbose, None)
+(temp_result, YamlConfig) = i.load_yaml_config(None)
 if temp_result:
 	# Set up logging before anything else! (Ugly?)
 	LoggingEnabled = YamlConfig['app_properties']['daemon_logging_properties']['logging_enabled']
@@ -80,7 +80,7 @@ def doAlert(application, instance, input, delimiter, separator):
 	daemon_logger.warn('  Input: ' + str(input))
 
 	# This is the function we call for now, to be rewritten.
-	result = r.eval_input_of_application(debug, verbose, application, instance, input, delimiter, separator)
+	result = r.eval_input_of_application(debug, application, instance, input, delimiter, separator)
 
 	# Logging might be handy
 	daemon_logger.error('Result from server ' + str(result))

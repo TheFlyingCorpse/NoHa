@@ -21,7 +21,7 @@ debug = False
 verbose = False
 
 # Read the config, so it doesnt have to be loaded for every call (downside to reading and parsing for every notifiction)
-(temp_result, YamlConfig) = i.load_yaml_config(debug, verbose, None)
+(temp_result, YamlConfig) = i.load_yaml_config(None)
 if temp_result:
     # Set up alert_logger.before anything else! (Ugly?)
     LoggingEnabled = YamlConfig['app_properties']['alert_logging_properties']['logging_enabled']
@@ -152,7 +152,7 @@ def main():
 
 	# Read the config, so it doesnt have to be loaded for every call (downside of reading and parsing for every notifiction)
 	if debug or verbose: print("Calling for YamlConfig")
-	(temp_result, YamlConfig) = i.load_yaml_config(debug, verbose, None)
+	(temp_result, YamlConfig) = i.load_yaml_config(None)
 	if temp_result:
 		if verbose or debug: print(" Configuration data read ")
 	else:

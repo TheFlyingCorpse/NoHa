@@ -53,7 +53,27 @@ class interface:
 				self.logger.info("Unknown application specified: " + str(application))
 				return False, "Unknown application specified: " + str(application)
 
-	def load_rules_config(self, config_file):
+	def load_rules_config(self, config):
+		"""
+		Return with a python object, representing the rules.
+		If not found, return False
+		"""
+		# If config file is unspecified, try to get the default one.
+		if not config:
+			self.logger.warn("No config specified, calling for the default one")
+			config_result, config = self.load_yaml_config(None)
+
+		# Read from the existing config what the path to the .yml file is
+		rulescfg = config['app_properties']['rulescfg']
+
+		# Parse the config file
+		temp_result, ruleslist = self.load_yaml_config(rulescfg)
+		if not temp_result:
+			self.logger.info("Unable to read the rulescfg file: " + str(rulescfg))
+			return False
+
+		# Return the finished list/array of rules.
+		return ruleslist['rules']
 
 	def load_yaml_config(self, config_file):
 		"""
@@ -84,10 +104,10 @@ class interface:
 		"""
 		self.logger.error("Going to check if file exists: " + str(file_path))
 		if not os.path.isfile(file_path):
-			if verbose: self.logger.warn("File not found: " + str(file_path))
+			self.logger.warn("File not found: " + str(file_path))
 			return False
 		
-		if verbose: self.logger.error("File found: " + str(file_path))
+		self.logger.error("File found: " + str(file_path))
 		return True
 
 #######################################################################

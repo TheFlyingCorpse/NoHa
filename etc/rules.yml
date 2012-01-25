@@ -1,0 +1,45 @@
+rules:
+- name: testrule
+  handler: nagios
+  instance: Null
+  contacts:
+  - contact1
+  - contact2
+  contactgroups:
+  - contactgroup1
+  - contactgroup2
+  timeframe: 24x7
+  time_exception:
+  - 07:00-08:00
+  - 12:00-13:00
+  - 14:00-17:00
+  conditions:
+  - "NOTIFICATIONTYPE;&;PROBLEM,RECOVERY,ACKNOWLEDGEMENT,FLAPPINGSTART,FLAPPINGSTOP,FLAPPINGDISABLED,DOWNTIMESTART,DOWNTIMEEND,DOWNTIMECANCELLED"
+  - "HOSTSTATE;&;UP,DOWN,UNREACHABLE"
+  - "SERVICESTATE;&;OK,WARNING,CRITICAL,UNKNOWN"
+  - "HOSTGROUPS;!;test*"
+  - "SERVICEGROUPS;!;lab*"
+  - "HOSTNAME;!;lab*"
+  - "SERVICEDESC;!;SSH,Swap"
+# SPACE?
+- name: iRulez
+  handler: nagios
+  instance: Null
+  contacts:
+  - contact2
+  - contact3
+  contactgroups:
+  - contactgroup3
+  - contactgroup4
+  timeframe: 8x5
+  time_exception:
+  - 08:30-09:30
+  - 12:00-13:00
+  - 14:00-16:00
+  conditions:
+  - "NOTIFICATIONTYPE;&;PROBLEM,RECOVERY,ACKNOWLEDGEMENT,FLAPPINGSTART,FLAPPINGSTOP,FLAPPINGDISABLED,DOWNTIMESTART,DOWNTIMEEND,DOWNTIMECANCELLED"
+  - "HOSTSTATE;&;UP,DOWN,UNREACHABLE"
+  - "SERVICESTATE;&;OK,WARNING,CRITICAL,UNKNOWN"
+  - "HOSTGROUPS;&;test*"
+  - "SERVICEGROUPS;&;lab*"
+  - "SERVICEDESC;!;SSH,Swap"

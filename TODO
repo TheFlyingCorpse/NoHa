@@ -16,15 +16,19 @@ Version 0.03 (Finished)
 * Move files about for a logical Python structure.
 * Make a server(listener) and client(alerter) with XML-RPC. 
 
-Version 0.04
+Version 0.04 (finished)
 * Logging structure, with cleanup related to STDOUT, STDERR and where to push the output.
+* Parse rules from rules.yml
+
+Version 0.05 (current, W.I.P.)
+* Parse rules from rules.yml
+
+Version 0.06
+* Concept timehandling.
 * Daemonize the server script.
 
-Version 0.05
+Version 0.07
 * Timeframes: Valid From, Valid To, Xth day of Month, "time1-time2,time3-time4"... (You'll understand later ;-) )
-
-Version 0.06 + 0.07
-* To be determined
 
 Version 0.08
 * Determine contacts to rules
@@ -34,6 +38,9 @@ Version 0.09
 
 Version 0.10
 * Concept shifts / on-call?
+
+Version 0.11
+* Concept webinterface with .yml parsing for timeframes and rules?
 
 Future -- (not yet decided)
 ---------------------------

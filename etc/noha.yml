@@ -16,8 +16,9 @@ app_properties:
     log_format: '%(asctime)-6s: [%(process)d]-[%(thread)s] - %(levelname)s - Alerter - %(funcName)s - %(message)s' # See: http://docs.python.org/library/logging.html#logrecord-attributes
     loglevel: debug # One of: debug, info, warn, error, critical
     logfile: /home/tfc/git/NoHa/var/noha-alert.log
-  rulesdir: /home/tfc/git/NoHa/etc/rules/
-version: 0.03b
+  rulescfg: /home/tfc/git/NoHa/etc/rules.yml
+  timeframecfg: /home/tfc/git/NoHa/etc/timeframes.yml
+version: 0.05
 applications:
 - name: icinga
   delimiter: ";"

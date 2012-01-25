@@ -6,6 +6,8 @@ What is NoHa
 
 NoHa is an alternative way to handle notifications sent from your nagios based monitoring system. The goal of the project is to make it easy to filter notifications to contacts based on rules with conditions that must be met for the rule to be valid.
 
+There is no need for duplicate timeperiod data, you can set it all up in your nagios based monitoring system OR in NoHa, or both. NoHa will not send which has not been called by your monitoring system to be notified about. Some prefer to have a general overarching timeperiod in their monitoring system to encompass everyone, which NoHa has mainly been written for. NoHa is to make notifications flexible enough to make everyone appreciate being notified, rather than annoyed by notifications not ment for the reciever.
+
 Requirements
 ------------
 Python requirements:
